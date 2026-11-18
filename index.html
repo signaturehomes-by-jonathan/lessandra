@@ -78,14 +78,27 @@
   }
 
   /* ===== Location tabs ===== */
-  .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px}
-  .tab{font:inherit;cursor:pointer;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r);padding:12px 6px;min-height:64px;text-align:center;color:var(--deep);transition:border-color .2s,background .2s}
-  .tab b{display:block;font-family:var(--serif);font-size:clamp(17px,4.6vw,22px);font-weight:600;line-height:1.1}
-  .tab span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-  .tab[aria-selected="true"]{background:var(--deep);border-color:var(--deep);color:#fff}
+  .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}
+  .tab{position:relative;font:inherit;cursor:pointer;background:var(--paper);border:2px solid var(--gold);border-radius:14px;padding:12px 6px 10px;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;color:var(--deep);box-shadow:0 6px 16px -10px rgba(23,45,42,.45);transition:transform .15s,box-shadow .2s,background .2s}
+  .tab:hover{transform:translateY(-2px);box-shadow:0 10px 20px -10px rgba(23,45,42,.5)}
+  .tab-pin{fill:var(--gold);flex:none}
+  .tab-pin circle{fill:var(--paper)}
+  .tab b{display:block;font-family:var(--sans);font-size:clamp(15px,4.4vw,19px);font-weight:600;line-height:1.15;letter-spacing:.01em}
+  .tab span{display:block;font-size:12.5px;color:var(--muted);font-weight:500}
+  .tab-hint{font-style:normal;font-size:11px;font-weight:600;color:var(--gold-ink);margin-top:2px;letter-spacing:.03em}
+  .tab[aria-selected="true"]{background:var(--deep);border-color:var(--deep);color:#fff;box-shadow:0 10px 22px -10px rgba(23,45,42,.7)}
   .tab[aria-selected="true"] span{color:var(--gold)}
-  .tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-  .panel{margin-top:18px}
+  .tab[aria-selected="true"] .tab-pin circle{fill:var(--deep)}
+  .tab[aria-selected="true"] .tab-hint{display:none}
+  /* Small pointer under the selected tab, linking it to the panel below */
+  .tab[aria-selected="true"]::after{content:"";position:absolute;left:50%;bottom:-9px;width:16px;height:16px;background:var(--deep);transform:translateX(-50%) rotate(45deg);border-radius:2px}
+  /* Gentle bounce on the pins of tabs not yet opened, so visitors notice they are clickable */
+  .tab:not([aria-selected="true"]) .tab-pin{animation:pinHop 2.8s ease-in-out infinite}
+  .tab:nth-child(3):not([aria-selected="true"]) .tab-pin{animation-delay:.4s}
+  @keyframes pinHop{0%,60%,100%{transform:translateY(0)}70%{transform:translateY(-5px)}80%{transform:translateY(0)}86%{transform:translateY(-2px)}}
+  @media (prefers-reduced-motion: reduce){.tab .tab-pin{animation:none!important}}
+  .tab:focus-visible{outline:3px solid var(--gold-ink);outline-offset:2px}
+  .panel{margin-top:22px}
   .panel[hidden]{display:none}
   .loc-grid{display:grid;gap:18px}
   @media(min-width:860px){.loc-grid{grid-template-columns:1fr 1.05fr;gap:32px;align-items:start}}
@@ -333,12 +346,12 @@
   <div class="wrap">
     <div class="kicker">Pick your location</div>
     <h2>One sample computation per location</h2>
-    <p class="muted">Tap a location. The other unit types and payment options are inside "See more computations".</p>
+    <p class="muted">Choose 1 of 3 locations below. Other unit types and payment options are inside "See more computations".</p>
 
     <div class="tabs" role="tablist" aria-label="Lessandra locations">
-      <button class="tab" role="tab" id="tab-tanza" aria-controls="tanza" aria-selected="true" data-loc="tanza"><b>Tanza</b><span>from ₱2.75M</span></button>
-      <button class="tab" role="tab" id="tab-trece" aria-controls="trece" aria-selected="false" data-loc="trece"><b>Trece</b><span>from ₱955K</span></button>
-      <button class="tab" role="tab" id="tab-gentri" aria-controls="gentri" aria-selected="false" data-loc="gentri"><b>Gen. Trias</b><span>from ₱2.4M</span></button>
+      <button class="tab" role="tab" id="tab-tanza" aria-controls="tanza" aria-selected="true" data-loc="tanza"><svg class="tab-pin" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M12 2.5c-3.9 0-7 3-7 6.9 0 5.1 7 12.1 7 12.1s7-7 7-12.1c0-3.9-3.1-6.9-7-6.9z"/><circle cx="12" cy="9.4" r="2.6"/></svg><b>Tanza</b><span>from ₱2.75M</span><em class="tab-hint">Tap to view</em></button>
+      <button class="tab" role="tab" id="tab-trece" aria-controls="trece" aria-selected="false" data-loc="trece"><svg class="tab-pin" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M12 2.5c-3.9 0-7 3-7 6.9 0 5.1 7 12.1 7 12.1s7-7 7-12.1c0-3.9-3.1-6.9-7-6.9z"/><circle cx="12" cy="9.4" r="2.6"/></svg><b>Trece</b><span>from ₱955K</span><em class="tab-hint">Tap to view</em></button>
+      <button class="tab" role="tab" id="tab-gentri" aria-controls="gentri" aria-selected="false" data-loc="gentri"><svg class="tab-pin" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M12 2.5c-3.9 0-7 3-7 6.9 0 5.1 7 12.1 7 12.1s7-7 7-12.1c0-3.9-3.1-6.9-7-6.9z"/><circle cx="12" cy="9.4" r="2.6"/></svg><b>Gen. Trias</b><span>from ₱2.4M</span><em class="tab-hint">Tap to view</em></button>
     </div>
 
     <!-- ===== TANZA (official price list effective July 2026) ===== -->
