@@ -256,6 +256,22 @@
   .rsteps p{font-size:14.5px;color:var(--muted);margin-top:2px}
   .rsteps strong{color:var(--ink)}
 
+  /* ===== Book a schedule ===== */
+  .book{background:var(--paper)}
+  .book-grid{display:grid;gap:12px;margin-top:20px}
+  @media(min-width:760px){.book-grid{grid-template-columns:1fr 1fr}}
+  .book-card{background:var(--cream);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column}
+  .book-card h3{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--deep);margin:4px 0 10px;line-height:1.15}
+  .book-card ul{list-style:none;display:grid;gap:6px;font-size:14.5px;margin-bottom:18px}
+  .book-card li::before{content:"✓";color:var(--gold-ink);font-weight:600;margin-right:8px}
+  .book-card .btn{margin-top:auto;width:100%}
+  .sched-note{font-size:13.5px;color:#6b5200;background:#FFF6DD;border:1px solid #f0dca0;border-radius:8px;padding:10px 12px;margin:-4px 0 16px}
+  .aud{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;padding:7px 14px;border-radius:999px;margin-bottom:6px;box-shadow:0 3px 8px rgba(0,0,0,.12)}
+  .aud.ofw{background:#1F5FAD}
+  .aud.ph{background:#B03A2E}
+  .book-card.ofw-card{border-top:5px solid #1F5FAD}
+  .book-card.ph-card{border-top:5px solid #B03A2E}
+
   /* ===== Requirements ===== */
   .req{display:grid;gap:10px;margin-top:12px}
   @media(min-width:760px){.req{grid-template-columns:repeat(3,1fr)}}
@@ -319,7 +335,7 @@
   <div class="wrap">
     <nav class="nav">
       <a class="logo" href="#top">LESSANDRA<span>CAVITE</span></a>
-      <a class="mini" href="#inquire">Request a presentation</a>
+      <a class="mini" href="#book">Book a presentation</a>
     </nav>
     <div class="hero-grid">
       <div>
@@ -329,7 +345,7 @@
         <!-- Lowest price: Elena IU, Trece, official price list effective July 2026 -->
         <p class="asof">Sample computations based on price lists as of July 2026</p>
         <div class="ctas">
-          <a class="btn" href="#inquire">Request a presentation</a>
+          <a class="btn" href="#book">Book a presentation</a>
           <a class="btn btn-outline" href="#locations">Compare the 3 locations</a>
         </div>
       </div>
@@ -741,6 +757,39 @@
   </div>
 </section>
 
+<!-- ===================== BOOK A SCHEDULE (two appointment types) ===================== -->
+<section class="book" id="book">
+  <div class="wrap">
+    <div class="kicker">Book a schedule</div>
+    <h2>Pick a time that works for you</h2>
+    <p class="muted">Choose the option that fits where you are now.</p>
+    <div class="book-grid">
+      <div class="book-card ofw-card">
+        <div class="aud ofw">✈️ Abroad or OFW</div>
+        <h3>Online presentation</h3>
+        <ul>
+          <li>One-on-one via Google Meet, 45 minutes</li>
+          <li>Walk-through of the 3 locations, house models and computations</li>
+          <li>Scheduled at your own time zone</li>
+        </ul>
+        <a class="btn btn-dark" href="#inquire" data-contact="cal-online" data-appt="Online presentation">Book an online presentation</a>
+      </div>
+      <div class="book-card ph-card">
+        <div class="aud ph">📍 In the Philippines</div>
+        <h3>Site viewing in Cavite</h3>
+        <ul>
+          <li>Visit Tanza, Trece Martires or General Trias</li>
+          <li>See the actual units, access roads and nearby landmarks</li>
+          <li>Get the updated computation for your unit on the spot</li>
+        </ul>
+        <p class="sched-note">Site viewing schedules change often, so I'll confirm your preferred date, time and location first by WhatsApp, Viber or call.</p>
+        <a class="btn btn-dark" href="#inquire" data-appt="Site viewing in Cavite">Request a site viewing</a>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top:12px">The online presentation opens my calendar in a new tab. Prefer to message first? <a href="#inquire">Send a request</a>, or call 0898 5003 509.</p>
+  </div>
+</section>
+
 <!-- ===================== INQUIRY FORM ===================== -->
 <section class="inquire" id="inquire">
   <div class="wrap">
@@ -910,7 +959,7 @@
 <nav class="actionbar" aria-label="Quick contact">
   <a href="https://wa.me/639431301792" target="_blank" rel="noopener">WhatsApp</a>
   <a href="https://m.me/Jtanrebullo" target="_blank" rel="noopener" data-contact="messenger">Messenger</a>
-  <a class="primary" href="#inquire">Book presentation</a>
+  <a class="primary" href="#book">Book presentation</a>
 </nav>
 
 <script>
@@ -927,7 +976,10 @@ const CONFIG = {
   PHONE_E164: "+638985003509",
   MESSENGER_URL: "https://m.me/Jtanrebullo",
   WHATSAPP_NUMBER: "639431301792",   // digits only, used by wa.me links
-  VIBER_URL: "viber://chat?number=%2B639431301792"
+  VIBER_URL: "viber://chat?number=%2B639431301792",
+  // Cal.com booking link for this project (shared account, separate event type).
+  // Leave blank to make the online presentation button open the request form instead.
+  CAL_LINK: "https://cal.com/jonathanrebullo-homes/lessandra-presentation"
 };
 
 /* ---------- Location tabs ----------
@@ -1061,6 +1113,17 @@ document.getElementById("year").textContent = new Date().getFullYear();
 /* Apply contact details to all Call / Messenger buttons in one place */
 document.querySelectorAll('[data-contact="phone"]').forEach(a => { if (CONFIG.PHONE_E164) a.href = "tel:" + CONFIG.PHONE_E164; });
 document.querySelectorAll('[data-contact="messenger"]').forEach(a => { if (CONFIG.MESSENGER_URL) a.href = CONFIG.MESSENGER_URL; });
+
+/* Online presentation button opens Cal.com; without a Cal.com link it falls back to the form */
+document.querySelectorAll('[data-contact="cal-online"]').forEach(a => {
+  if (!CONFIG.CAL_LINK) return;
+  a.href = CONFIG.CAL_LINK; a.target = "_blank"; a.rel = "noopener"; a.removeAttribute("data-appt");
+});
+/* Appointment buttons pre-select the meeting type in the form */
+document.querySelectorAll("[data-appt]").forEach(btn => btn.addEventListener("click", () => {
+  const sel = document.getElementById("meeting");
+  if (sel) sel.value = btn.getAttribute("data-appt");
+}));
 
 /* Campaign tracking (UTM) so we know which post or ad sent the lead */
 function getTracking() {
@@ -1226,7 +1289,7 @@ document.getElementById("lead-form").addEventListener("submit", async (e) => {
 
   if (delivered) {
     form.reset();
-    showStatus("ok", "<strong>Thank you, " + firstName + "!</strong> I received your inquiry and will send the updated computation shortly. For a faster reply, message me on Messenger.");
+    showStatus("ok", "<strong>Thank you, " + firstName + "!</strong> I received your inquiry and will send the updated computation shortly. For a faster reply, message me on Messenger." + (CONFIG.CAL_LINK ? ' Want to lock in a time now? <a href="' + CONFIG.CAL_LINK + '" target="_blank" rel="noopener"><b>Book an online presentation</b></a>.' : ""));
   } else {
     showDirectSend(payload, "<strong>Sorry, the form could not be sent.</strong> Please tap a button below so your inquiry still reaches me.");
   }
